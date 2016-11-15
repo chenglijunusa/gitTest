@@ -1,0 +1,1683 @@
+﻿<!DOCTYPE html>
+<html>
+   
+   <head>
+       <style>
+           .rightAsign {text-align:right; }
+             .leftAsign {text-align:left; }
+             .centerAsign {text-align:center; }
+           .noBorderHierarchy {
+               min-width: 140px;
+               border-width: 0px;
+               border-color: white;
+           }
+           #goHome {background-image:url(Images/home.png);background-repeat:no-repeat;margin-left:10px; vertical-align:top; border-width:0px; display:block;  height:30px;    width:40px;}
+           #goExcel {background-image:url(Images/Export.png);display:block;background-repeat:no-repeat;vertical-align:top; margin-right:25px;border-color:white;border-width:0px;  width:40px ;height:30px;
+           }
+       </style>
+         <style type="text/css">
+        body{font-family:Sans-Serif,arial,verdana;font-size:8pt;margin:0;padding:10px,10px,10px,10px;text-align:center;}
+        #header{width:100%;cursor:default;border:none;}
+        .header_left{background-color:#fa6900;width:0px;z-index:1000;}
+        .header_right{background-color:#ffd900;width:200px;}
+        a{color:#000;text-decoration:none;}
+        .logo{background-image:url("images/header_ism.jpg");background-repeat:no-repeat;height:120px; min-width:1000px; margin-left:10px; margin-top:10px; z-index:2000; border-width:medium; border-color:rgb(93,188,210)}
+        .CostEx{background-image:url("images/header1_Repeat.jpg");background-repeat:repeat;width:90%;height:11%;position:relative;z-index:2000;border:none;text-align:right;}
+      .nav {background-color:rgb(238,238,238);position:absolute;width:9%;height:2.5%;top:80PX;left:2%;z-index:2200;font-size:12pt; vertical-align:central; text-align:left; opacity: 0.4;
+    filter: alpha(opacity=40);}
+      
+        .theader{background-image:url(images/th_smallbg.png); background-repeat:repeat-x;height:26px;}
+        th{border-color: #FFFFFF #DCF2FC #3C7FB1 #8BBDDE;border-right: 1px solid #DCF2FC;border-style: solid;border-width: 0 1px 1px; }
+    </style>
+
+      <title>AngularJS Directives</title>
+         <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+ 
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+       <script src="scripts/jquery.selectboxes.min.js" type="text/javascript"></script>
+       
+<!--       <link rel="stylesheet" href="Scripts/bootstrap.min.css">
+
+  <script src="Scripts/bootstrap.min.js"></script>-->
+       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/sandstone/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+      
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+  
+       <script src="Scripts/LeeChengTools.js"></script>
+       <script src="Scripts/jquery.tablesorter.js" type="text/javascript"></script>
+      <script>
+     
+          var myApp = angular.module('MyApp', []);
+         
+      myApp.controller('MyController', function($scope, $http) {
+        
+    
+          var SVP0 = getATTUID(getCookie("SVP"));
+  
+      
+          //var pp = "IPTV";
+          //document.cookie = "ProductID=" + pp;
+
+        var myProduct = getCookie("ProductID");
+       
+        var ID0 = "Ch" + myProduct.toString();
+    
+        switch (ID0) {
+            case "ChDTV":
+                $scope.HasDTV = true;
+                break;
+            case "ChIPTV":
+                $scope.HasIPTV = true;
+                break;
+            case "ChIPBB":
+                $scope.HasIPBB = true;
+                break;
+            case "ChHSIA":
+                $scope.HasHSIA = true;
+                break;
+
+            case "ChIPDSL":
+                $scope.HasIPDSL = true;
+                break;
+
+            case "ChVOIP":
+                $scope.HasVOIP = true;
+                break;
+
+            case "ChMobilityGross":
+                $scope.hasMobilityGross = true;
+                break;
+
+
+            case "ChMobilityNet":
+                $scope.hasMobilityNet = true;
+                break;
+
+                    case "ChTOTALUV":
+                $scope.TOTALUVchecked = true;
+                break;
+            case "ChOVERALL":
+                $scope.OVERALLchecked = true;
+                break;
+            case "ChCHARGE":
+                $scope.CHARGEchecked = true;
+                break;
+
+            default:
+                console.log('There should not be a default failover at this thing.');
+        }
+
+       
+              var ddlLevel0 = "";
+                    $('#ddlCENTER').attr('disabled', false).removeOption(/./).addOption('All Centers', 'All Centers');
+            // $scope.sections = [{ id: '0', name: 'Ops' }, { id: '1', name: 'BV' }, { id: '2', name: 'Fin' }];
+              $scope.Targets = [{ id: '0', name: 'Ops' }, { id: '1', name: 'BV' }, { id: '2', name: 'Fin' }];
+              $scope.Levels = [ { id: '0', name: 'VP' }, { id: '1', name: 'GM' }, { id: '2', name: 'SM' }, { id: '3', name: 'VM' }, { id: '4', name: 'Coach' }, { id: '5', name: 'REP' }, { id: '6', name: 'CENTER' }];
+                      ddlLevel0 = $scope.Levels[0].name;
+              $scope.getSelectedLevel = function (myLevel) {
+                 
+                  fruitId = $scope.ddlLevel;
+                  if (angular.isUndefined(ddlLevel0)) {
+                      ddlLevel0 = $scope.Levels[0].name;
+                  }
+                  else { ddlLevel0 = $scope.Levels[myLevel].name; }
+
+                  if (ddlLevel0 == "ENT") { $scope.myVar = true; document.getElementById("txtTarget").style.visibility = "visible"; document.getElementById("lstTarget").style.visibility = "visible"; } else { $scope.myVar = false; document.getElementById("txtTarget").style.visibility = "hidden"; document.getElementById("lstTarget").style.visibility = "hidden"; }
+              
+
+              }
+              ddlTarget0 = "Ops";
+              ddlTarget0 = $scope.Targets[0].name;
+              $scope.getSelectedTarget = function (Target) {
+                  if (angular.isUndefined(Target)) {
+                      ddlTarget0 = $scope.Targets[0].name;
+                  }
+                  else { ddlTarget0 = $scope.Targets[Target].name; }
+                 // alert(ddlTarget0);
+              }
+              $http.post('/CarService.asmx/GetDate', { UpperLevel: 'the username' }).success(function (response) {
+                $scope.ReportDates = [];
+                var cars = response.d;
+
+                  for (var i = 0; i < cars.length; i++) {
+
+                      var val = cars[i][0].Value;
+
+                      var text = cars[i][1].Value;
+                      $scope.ReportDates.push({ id: val, name: text });
+
+                  }
+                 
+                  $scope.goExcel = function (fruit) { alert("fffffffffff"); }
+
+
+                  $scope.LoadReport = function (fruit) {                      
+                      document.body.style.cursor = 'wait';
+                     
+                      var WhichChecked = [];
+                    
+                      // var a = WhichChecked.indexOf("222");                   
+
+                      var fruitId = $scope.ReportDate;
+                      var ReportDate0 = "";
+
+                      if (angular.isUndefined(fruitId)) {
+                          ReportDate0 = $scope.ReportDates[0].name;
+                      }
+                      else { ReportDate0 = $scope.ReportDates[fruitId].name; }
+
+                      var chProducts=0;
+                      chProducts= chProducts+($scope.HasDTV ? 1 : 0);
+                      chProducts= chProducts+( $scope.HasIPTV ? 1 : 0);
+
+                      chProducts= chProducts+( $scope.HasIPBB ? 1:0);
+                      chProducts= chProducts+( $scope.HasHSIA ? 1 : 0);
+                      chProducts= chProducts+ ($scope.HasIPDSL ? 1 :0);
+                      chProducts= chProducts+ ($scope.HasVOIP ? 1 : 0);
+                      chProducts = chProducts + ($scope.HasMobilityGross ? 1 : 0);
+                      chProducts = chProducts + ($scope.HasMobilityNet ? 1 : 0);
+
+                      chProducts= chProducts+ ($scope.HasIPTVc ? 1 :0);
+                      chProducts= chProducts+ ($scope.HasIPBBc ? 1 :0);
+                      chProducts= chProducts+ ($scope.HasHSIAc ? 1 : 0);
+                      chProducts= chProducts+ ($scope.HasIPDSLc ? 1 : 0);
+                      chProducts= chProducts+ ($scope.HasVOIPc ? 1 : 0);
+                             
+                      chProducts= chProducts+ ($scope.HasTOTALUV ? 1 : 0);
+                      chProducts= chProducts+ ($scope.HasUVCancels ? 1 : 0);
+                      chProducts= chProducts+($scope.HasOveralCancels ? 1 :0);
+                   //   throw new Error('This is not an error. This is just to abort javascript');
+                      if (chProducts == 0) { alert("you have to choose a product"); document.body.style.cursor = 'default'; return; }
+              
+                      $scope.columnsTTTT = ['Actual', ' Target', 'Attainment', 'Actual', ' Target', 'Attainment', 'Actual', ' Target', 'Attainment', 'Actual', ' Target', 'Attainment'];
+
+                     // var t6 = $("#ddlCENTER").val();
+                     
+                   
+                      var request = $http({
+                          method: "post",
+                         
+                          url: "/CarService.asmx/GetLevel2",
+                        
+                          data: {
+                              ReportDate: ReportDate0,
+                              DisplayLevel: ddlLevel0,
+                              Target: ddlTarget0,
+                              SVPValue: SVP0,
+                              VPValue: $("#ddlVP").val(),
+                              GMValue: $("#ddlGM").val(),
+                              SMValue: $("#ddlSM").val(),
+                              TMValue: $("#ddlTM").val(),
+                              CENTERValue: $("#ddlCENTER").val(),
+                              REPValue: $("#ddlREP").val(),
+                              DTVChecked: $scope.HasDTV ? true : false,
+                              IPTVChecked: $scope.HasIPTV ? true : false,
+                              IPBBChecked: $scope.HasIPBB ? true : false,
+                              HSIAChecked: $scope.HasHSIA ? true : false,
+                              IPDSLChecked: $scope.HasIPDSL ? true : false,
+                              VOIPChecked: $scope.HasVOIP ? true : false,
+
+                              ALChecked:  false,
+                              DSLChecked: false,
+
+                              MobilityGrossChecked: $scope.HasMobilityGross ? true : false,
+                              MobilityNetChecked: $scope.HasMobilityNet ? true : false,
+
+                              IPTVcChecked: $scope.HasIPTVc ? true : false,
+                              IPBBcChecked: $scope.HasIPBBc ? true : false,
+                              HSIAcChecked: $scope.HasHSIAc ? true : false,
+                              IPDSLcChecked: $scope.HasIPDSLc ? true : false,
+                              VOIPcChecked: $scope.HasVOIPc ? true : false,
+                             
+                              TOTALUVChecked: $scope.HasTOTALUV ? true : false,
+                              UVCancelsChecked: $scope.HasUVCancels ? true : false,
+                              OveralCancelsChecked: $scope.HasOveralCancels ? true : false,
+                              InclChecked: $scope.HasIncl ? true : false
+                              // name: "Kim",
+                              // status: "Best Friend"
+                          }
+                    
+                      });
+                      request.error(
+                            function (response) {
+                                                               alert(response.d)
+                            });
+                      request.success(
+                          function (response) {
+                              
+                              document.body.style.cursor = 'default';
+                              $scope.tables = [];
+                              $scope.columns = [];
+                              $scope.AllDatas = [];
+                              var cars = response.d;
+                              var items = "<table  class='tablesorter' style='width:90%;padding:5px,5px,5px,5px;'>";
+                              //items += "<thead><tr><th>" + 'Actual' + "</th><th>" + ' Target' + "</th><th>" + 'Attainment' + "</th><th>" + 'Actual' + "</th><th>" + 'Target' + "</th><th>" + 'Attainment' + "</th><th>" + 'Actual' + "</th><th>" + 'Target' + "</th><th>" + 'Attainment' + "</th><th>" + 'Actual' + "</th><th>" + "Target" + "</th><th>" + "Attainment" + "</th></tr></thead> <tbody>";
+                              var sHeader = "";
+                              var sH0 = "", sH1 = "", sH2 = "",sHf="";
+                              var sFoot = "";
+                              var sBody = "";
+                              // var aaa = [];
+                              var aaa = cars[0];
+                              var iHierarchyNumber = 0;
+                     
+                              for (var k = 0; k < aaa.length; k++) {
+                                  if (cars[0][k].Key == "CENTER_TYPE") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "CENTER_TYPE" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+
+                                  if (cars[0][k].Key == "CENTER_NAME") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "CENTER_NAME" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+
+
+                                  if (cars[0][k].Key == "HREP") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "REP" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+                                  if (cars[0][k].Key == "HTM") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "COACH" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+                                  if (cars[0][k].Key == "HVM") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "VM" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+                                  if (cars[0][k].Key == "HSM") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "SM" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+
+
+                                  if (cars[0][k].Key == "HGM") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "GM" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+
+
+                                  if (cars[0][k].Key == "HVP") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "VP" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+                                  if (cars[0][k].Key == "HSVP") { sHeader = sHeader + "<th class='sorter-true' style='text-align:center'>" + "SVP" + "</th>"; iHierarchyNumber = iHierarchyNumber + 1; sH0 = sH0 + "<th></th>"; }
+
+
+
+                              }
+
+                              var Sums = [];
+                              var k = iHierarchyNumber;
+                        
+                             for (var l = 0; l < 100; l++) { Sums[l] = 0; }
+
+                              for (var i = 0; i <= cars.length-1; i++) {
+                                  k = iHierarchyNumber;
+                                     var s="";
+                                     for (var j = 1; j < cars[i].length; j++) {
+                                         if (j <= iHierarchyNumber) { s = s + "<td  class='leftAsign'>" + cars[i][j].Value + "</td>"; }
+                                         else { s = s + "<td  class='rightAsign'>" + cars[i][j].Value + "</td>"; }
+                                       
+                                     }
+                                     if ($scope.HasDTV) {
+                                                                                 
+                                         k++;
+
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+
+
+                                     if ($scope.HasIPTV) {
+
+                                         k++;
+                                    
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         var ttt = k;
+
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+
+                                     if ($scope.HasIPBB) {
+                                         k++;
+                                         
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         var ttt = k;
+
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         var yyy = Sums[k];
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasHSIA) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasIPDSL) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasVOIP) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasMobilityGross) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasMobilityNet) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasIPTVc) {
+
+                                         k++;
+
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+
+                                     if ($scope.HasIPBBc) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasHSIAc) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasIPDSLc) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasVOIPc) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasTOTALUV) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     
+                                     if ($scope.HasUVCancels) {
+                                         k++;
+                                         var tttt = i;
+                                         var t = cars[i][k].Value;   
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                     if ($scope.HasOveralCancels) {
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         Sums[k] = Sums[k] + parseInt(ChengReplaceAll1(cars[i][k].Value, ",", ""));
+                                         k++;
+                                         k++;
+                                         k++;
+                                         k++;
+                                     }
+                                    sBody = sBody + "<tr>" + s + "</tr>";                               
+                                 
+
+
+                              }
+
+                              var sHType = "<th class='centerAsign'>" + "Actual" + "</th><th class='centerAsign'>" + "Target" + "</th><th class='centerAsign'>" + "Attainment" + "</th><th class='centerAsign'>" + "Actual" + "</th><th class='centerAsign'>" + "Target" + "</th><th class='centerAsign'>" + "Attainment" + "</th><th class='centerAsign'>" + "Actual" + "</th><th class='centerAsign'>" + "Target" + "</th><th class='centerAsign'>" + "Attainment" + "</th><th class='centerAsign'>" + 'Actual' + "</th><th class='centerAsign'>" + "Target" + "</th><th class='centerAsign'>" + "Attainment" + "</th>";
+                              var sHType2 = "<th class='centerAsign' colspan='3'>DISCONNECT</th>" + "<th class='centerAsign' colspan='3'>SAVE</th>" + "<th class='centerAsign' colspan='3'>OPPORTUNITY</th>" + "<th class='centerAsign' colspan='3'>SAVE RATE</th>";
+                              var g1 = Sums[k];
+                              var L = 0;
+
+                              if ($scope.HasDTV) {
+                                  L++;
+                                  k = iHierarchyNumber + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>DTV Disconnects</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+
+
+                                  sHeader = sHeader + sHType;
+                              }
+
+                              if ($scope.HasIPTV) {
+                                  L++;
+                                  k = iHierarchyNumber +    (L-1)*12+1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>IPTV Disconnects</th>"
+                                  sH2 = sH2 + sHType2;
+                                 
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot =  sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>" 
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot =  sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>" ;
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+
+
+                                  sHeader = sHeader + sHType;
+                              }
+
+                              if ($scope.HasIPBB) {
+                                      L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>IPBB Disconnects</th>"
+                                  sH2 = sH2 + sHType2;
+                                 
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+
+                              if ($scope.HasHSIA) {
+                                    L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>HSIA Disconnects</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+
+
+                              if ($scope.HasIPDSL) {
+                                          L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>IPDSL Disconnects</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+
+                              if ($scope.HasVOIP) {
+                                       L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>VOIP Disconnects</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+
+                              if ($scope.HasMobilityGross) {
+                                       L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>Mobility GROSS</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+
+                              if ($scope.HasMobilityNet) {
+                                        L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>Mobility NET</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+
+
+                              if ($scope.HasIPTVc) {
+                                      L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>IPTV Cancels</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                              if ($scope.HasIPBBc) {
+                                      L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>IPBB Cancels</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                              if ($scope.HasHSIAc) {
+                                     L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>HSIA Cancels</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                              if ($scope.HasIPDSLc) {
+                                        L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>IPDSL Cancels</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                              if ($scope.HasVOIPc) {
+                                     L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>VOIP Cancels</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                             
+
+                            if ($scope.HasTOTALUV) {
+                                   L++;
+                                k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>All UV Disconnects</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                              if ($scope.HasUVCancels) {
+                                       L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>All UV Cancels</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                              if ($scope.HasOveralCancels) {
+                                     L++;
+                                  k = iHierarchyNumber + (L - 1) * 12 + 1;
+                                  sH1 = sH1 + "<th class='centerAsign' colspan='12'>OVERALL UV,AL,DSL DISCOS & CANCELS</th>"
+                                  sH2 = sH2 + sHType2;
+
+                                  var a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  var a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>"
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  a1 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  a2 = Sums[k];
+                                  sFoot = sFoot + "<th class='rightAsign'>" + numberWithCommas(Sums[k]) + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th class='rightAsign'>" + percentage(a1, a2) + "</th>";
+
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  k++;
+                                  sFoot = sFoot + "<th>" + "" + "</th>";
+                                  sHeader = sHeader + sHType;
+                              }
+                              if (ddlLevel0 == "ENT") {
+                                  items = items + "<thead><tr>" + sH0 + sH1 + "</tr><tr>" + sH0 + sH2 + "</tr><tr>" + sHeader + "</tr></thead><tfoot><tr class='rightAsign'>" + sH0.replace("<th></th>", "<th class='rightAsign'>Total</th>") + sFoot + "</tr></tfoot>" + "</table>";
+                              }
+                              else {
+                                  items = items + "<thead><tr>" + sH0 + sH1 + "</tr><tr>" + sH0 + sH2 + "</tr><tr>" + sHeader + "</tr></thead><tfoot><tr class='rightAsign'>" + sH0.replace("<th></th>", "<th class='rightAsign'>Total</th>") + sFoot + "</tr></tfoot><tbody>" + sBody + "</tbody>" + "</table>";
+                              }
+
+                              document.cookie = "myFoot="+sFoot;
+                              //$cookieStore.put("myFoot", sFoot);
+                           
+                              $('#rData').html(items);
+
+                              setSort(iHierarchyNumber);
+                              
+
+                              
+                         }
+                        
+                      );
+
+                   
+
+                  };
+
+                 
+               
+             
+                      $http.post('/CarService.asmx/GetCENTER', { UpperLevel: '1' }).success(function (response) {
+                    
+                          $scope.CENTERs = [];
+                          var cars = response.d;
+
+                          for (var i = 0; i < cars.length; i++) {
+
+                              var val = cars[i][0].Value;
+
+                              var text = cars[i][1].Value;
+                          
+                              $scope.CENTERs.push({ id: val, name: text });
+
+                          }
+
+
+                          $http.post('/CarService.asmx/GetVP', { UpperLevel: SVP0 }).success(function (response) {
+                              $scope.VPs = [];
+                              $scope.VPs.push({ id: 0, name: 'All VPs', Selected: true });
+                  
+                              var cars = response.d;
+
+                              for (var i = 0; i < cars.length; i++) {
+
+                                  var val = cars[i][0].Value;
+
+                                  var text = cars[i][1].Value;
+
+                                  $scope.VPs.push({ id: val, name: text });
+
+                              }
+               
+                              $("#ddlReportDate").val(1);
+                              $("#ddlTarget").val(0);
+                              $("#ddlLevel").val("0");
+
+                              // $("#ddlVP").val('All VPs');
+                              //  $("#ddlGM").val('All GMs');
+                              //  $("#ddlSM").val('All SM/VMs');
+                              // $("#ddlTM").val('All Coachs');
+                              // $("#ddlREP").val('All REPs');
+                              $("#ddlCENTER").val('All Centers');
+                 
+
+                           
+
+                              $scope.GMs = [];
+                              $scope.GMs.push({ id: 0, name: 'All GMs', Selected: true });
+
+                              $scope.SMs = [];
+                              $scope.SMs.push({ id: 0, name: 'All SM/VMs', Selected: true });
+
+                              $scope.TMs = [];
+                              $scope.TMs.push({ id: 0, name: 'All Coachs', Selected: true });
+
+                              $scope.REPs = [];
+                              $scope.REPs.push({ id: 0, name: 'All REPs', Selected: true });
+
+                           
+                                      document.getElementById("ChIncl").style.visibility = "visible";
+                                    
+        
+                              $scope.getGM = function (score) {
+                                  //  
+                   
+                                  $http.post('/CarService.asmx/GetGM', { UpperLevel: $scope.VP }).success(function (response) {
+                                      $scope.GMs = [];
+                                      $scope.GMs.push({ id: 0, name: 'All GMs', Selected: true });
+
+                                      var cars = response.d;
+                            
+                                      for (var i = 0; i < cars.length; i++) {
+
+                                          var val = cars[i][0].Value;
+
+                                          var text = cars[i][1].Value;
+
+                                          $scope.GMs.push({ id: val, name: text });
+                                     
+
+                                      }
+                                      if ($scope.VP != "0") {
+
+                                          document.getElementById("ChIncl").style.visibility = "hidden";
+                                          $scope.Levels = [{ id: '0', name: 'GM' }, { id: '1', name: 'SM' }, { id: '2', name: 'VM' }, { id: '3', name: 'Coach' }, { id: '4', name: 'REP' }, { id: '5', name: 'CENTER' }];
+                                          $scope.myLevel = '0';
+                                          ddlLevel0 = "GM";
+                                      }
+                                      else {
+                                          $scope.Levels = [{ id: '0', name: 'VP' }, { id: '1', name: 'GM' }, { id: '2', name: 'SM' }, { id: '3', name: 'VM' }, { id: '4', name: 'Coach' }, { id: '5', name: 'REP' }, { id: '6', name: 'CENTER' }];
+                                          $scope.myLevel = '0';
+                                          ddlLevel0 = "VP";
+                                          document.getElementById("ChIncl").style.visibility = "visible";
+                                          $scope.GMs = [];
+                                          $scope.GMs.push({ id: 0, name: 'All GMs', Selected: true });
+
+                                          $scope.SMs = [];
+                                          $scope.SMs.push({ id: 0, name: 'All SM/VMs', Selected: true });
+
+                                          $scope.TMs = [];
+                                          $scope.TMs.push({ id: 0, name: 'All Coachs', Selected: true });
+
+                                          $scope.REPs = [];
+                                          $scope.REPs.push({ id: 0, name: 'All REPs', Selected: true });
+                                      }
+                     
+                        
+                                 // ddlLevel0 = $scope.Levels[$scope.myLevel].name;
+                                 // $("#ddlTarget").val(2);
+                                  $scope.getSM = function (score) {
+
+                                      $http.post('/CarService.asmx/GetSM', { UpperLevel: $scope.GM }).success(function (response) {
+                                          var cars = response.d;
+                                          $scope.SMs = [];
+                                          $scope.SMs.push({ id: 0, name: 'All SMs', Selected: true });
+
+                                          for (var i = 0; i < cars.length; i++) {
+
+                                              var val = cars[i][0].Value;
+
+                                              var text = cars[i][1].Value;
+
+                                              $scope.SMs.push({ id: val, name: text });
+
+                                          }
+                                          if ($scope.GM != "0") {
+                                        //      $scope.Levels = [{ id: '4', name: 'SM/VM' }, { id: '5', name: 'Coach' }, { id: '6', name: 'REP' }];
+                                              $scope.Levels = [{ id: '0', name: 'SM' }, { id: '1', name: 'VM' }, { id: '2', name: 'Coach' }, { id: '3', name: 'REP' }, { id: '4', name: 'CENTER' }];
+
+                                              $scope.myLevel = '0';
+                                              ddlLevel0 = "SM";
+                                          }
+                                          else {
+
+                                              //$scope.Levels = [{ id: '3', name: 'GM' }, { id: '4', name: 'SM/VM' }, { id: '5', name: 'Coach' }, { id: '6', name: 'REP' }];
+                                              $scope.Levels = [{ id: '0', name: 'GM' }, { id: '1', name: 'SM' }, { id: '2', name: 'VM' }, { id: '3', name: 'Coach' }, { id: '4', name: 'REP' }, { id: '5', name: 'CENTER' }];
+
+                                              $scope.myLevel = '0';
+                                              ddlLevel0 = "GM";
+                                             
+
+
+                                              $scope.TMs = [];
+                                              $scope.TMs.push({ id: 0, name: 'All Coachs', Selected: true });
+
+                                              $scope.REPs = [];
+                                              $scope.REPs.push({ id: 0, name: 'All REPs', Selected: true });
+                                          }
+                                          $scope.getTM = function (score) {
+
+                                              $http.post('/CarService.asmx/GetTM', { UpperLevel: $scope.SM }).success(function (response) {
+                                                  var cars = response.d;
+                                                  $scope.TMs = [];
+                                                  $scope.TMs.push({ id: 0, name: 'All Coachs', Selected: true });
+
+                                                  for (var i = 0; i < cars.length; i++) {
+
+                                                      var val = cars[i][0].Value;
+
+                                                      var text = cars[i][1].Value;
+
+                                                      $scope.TMs.push({ id: val, name: text });
+
+                                                  }
+                                                  if ($scope.SM != "0") {
+                                                      $scope.Levels = [{ id: '0', name: 'Coach' }, { id: '1', name: 'REP' }, { id: '2', name: 'CENTER' }];
+                                                      $scope.myLevel = '0';
+                                                      ddlLevel0 = "COACH";
+                                                  }
+                                                  else {
+                                                      $scope.Levels = [{ id: '0', name: 'SM' }, { id: '1', name: 'VM' }, { id: '2', name: 'Coach' }, { id: '3', name: 'REP' }, { id: '4', name: 'CENTER' }];
+                                                      $scope.myLevel = '0';
+                                                      ddlLevel0 = "SM";
+                                                     
+
+                                              
+                                                      $scope.REPs.push({ id: 0, name: 'All REPs', Selected: true });
+                                                  }
+
+                                                  $scope.getREP = function (score) {
+
+                                                      $http.post('/CarService.asmx/GetREP', { UpperLevel: $scope.TM }).success(function (response) {
+                                                          var cars = response.d;
+                                                          $scope.REPs = [];
+                                                          $scope.REPs.push({ id: 0, name: 'All REPs', Selected: true });
+
+                                                          for (var i = 0; i < cars.length; i++) {
+
+                                                              var val = cars[i][0].Value;
+
+                                                              var text = cars[i][1].Value;
+
+                                                              $scope.REPs.push({ id: val, name: text });
+
+                                                          }
+                                                          if ($scope.TM != "All Coachs") {
+                                                              $scope.Levels = [{ id: '0', name: 'REP' }, { id: '1', name: 'CENTER' }];
+                                                              $scope.myLevel = '0';
+                                                              ddlLevel0 = "REP";
+                                                          }
+                                                          else {
+                                                              $scope.Levels = [{ id: '0', name: 'Coach' }, { id: '1', name: 'REP' }, { id: '2', name: 'CENTER' }];
+                                                              $scope.myLevel = '0';
+                                                              ddlLevel0 = "COACH";
+                                                          }
+                                                      });
+                                                  }
+
+
+                                              });
+
+                                          }//TM END
+
+                                      });
+                                  } //SM END
+
+
+                                  });
+                              } //SM END
+
+
+
+              });//SVP END
+                      });
+                  
+              });
+             
+        //  });
+          });
+          myApp.filter('percentage', ['$filter', function ($filter) {
+              return function (input) {
+                  return $filter('number')(input * 100, 2) + '%';
+              };
+          }]);
+          myApp.filter('string', ['$filter', function ($filter) {
+              return function (input) {
+                  return input;
+              };
+          }]);
+      </script>
+   </head>
+   
+   <body ng-app="MyApp" style="padding-left:1px;border-width:0px; border-color:white ">
+        
+       <div  ng-controller="MyController">
+          
+  <table style="border-width:0px; border-color:white">
+      <tr style="height:20px;border-width:0px; border-color:white" ><td colspan="12" style="text-align:center" class="noBorderHierarchy"><div class="logo"  ></div> </td></tr>
+      <tr><td  class="noBorderHierarchy">Report Date:</td><td  class="noBorderHierarchy">VP:</td><td  class="noBorderHierarchy">GM:</td><td  class="noBorderHierarchy">SM/VM:</td><td class="noBorderHierarchy">Coach:</td><td  class="noBorderHierarchy" >Center:</td><td  class="noBorderHierarchy">REP:</td></tr>
+      <tr><td style="border-width:0px; border-color:white"> <select  id="ddlReportDate"  ng-model="ReportDate" ng-change="getDate(score)">  <option ng-repeat="option in ReportDates" value="{{option.id}}">{{option.name}}</option>
+
+               </select></td>  
+        
+           <td  class="noBorderHierarchy"> <select  id="ddlVP" ng-model="VP"   ng-change="getGM(score)"> 
+
+          <option ng-repeat="fruit in VPs" value="{{fruit.id}}"
+                        ng-selected="{{ fruit.Selected == true }}">
+                {{fruit.name}}
+            </option>
+          </select></td>
+
+       <td  class="noBorderHierarchy"> <select  id="ddlGM" ng-model="GM" ng-change="getSM(score)"> <option ng-repeat="fruit in GMs" value="{{fruit.id}}"
+                        ng-selected="{{ fruit.Selected == true }}">
+                {{fruit.name}}
+            </option> </select></td>
+
+      <td  class="noBorderHierarchy"> <select  id="ddlSM" ng-model="SM" ng-change="getTM(score)"> 
+           <option ng-repeat="fruit in SMs" value="{{fruit.id}}"
+                        ng-selected="{{ fruit.Selected == true }}">
+                {{fruit.name}}
+            </option>
+
+           </select></td>
+       <td  class="noBorderHierarchy"> <select  id="ddlTM" ng-model="TM" ng-change="getREP(score)"> <option ng-repeat="fruit in TMs" value="{{fruit.id}}"
+                        ng-selected="{{ fruit.Selected == true }}">
+                {{fruit.name}}
+            </option>
+
+            </select></td>
+        <td  class="noBorderHierarchy" style="max-width:200px;text-align:center"> <select  id="ddlCENTER" ng-model="CENTER" style="max-width:180px"> <option ng-repeat="option in CENTERs" value="{{option.name}}">{{option.name}}</option> </select></td>
+
+       <td  class="noBorderHierarchy"> <select  id="ddlREP" ng-model="REP" >  <option ng-repeat="fruit in REPs" value="{{fruit.id}}"
+                        ng-selected="{{ fruit.Selected == true }}">
+                {{fruit.name}}
+            </option> </select></td>
+
+
+         </tr></table>
+      <table style="width:90%" ><tr><td style="width:13%;text-align:left;border-color:white;border-width:0px;">Display Level</td>
+        
+          <td style="width:6%; border-color:white;text-align:left;"></td>
+          <td style="width:6%; border-color:white;text-align:left;">Disco</td>
+          <td style="width:6.5%;border-color:white;text-align:left;" >  <input  Id="ChDTV" ng-model="HasDTV" type="checkbox" ng-checked="HasDTV" /> <label>DTV</label></td>
+          <td style="width:6.5%;border-color:white;text-align:left;"> <input  ID="ChIPTV" ng-model="HasIPTV" type="checkbox" ng-checked="HasIPTV"/><label>IPTV</label></td>
+          <td style="width:6.5%;border-color:white;text-align:left;"> <input  ID="ChIPBB" ng-model="HasIPBB" type="checkbox" ng-checked="HasIPBB"/><label>IPBB</label></td>
+          <td style="width:6.5%;border-color:white;text-align:left;"> <input  ID="ChHSIA" ng-model="HasHSIA" type="checkbox" ng-checked="HasHSIA"/><label>HSIA</label></td>
+          <td style="width:6.5%;border-color:white;text-align:left;"> <input  ID="ChIPDSL" ng-model="HasIPDSL" type="checkbox" ng-checked="HasIPDSL"/><label>IPDSL</label></td>
+          <td style="width:6.5%;border-color:white;text-align:left;"> <input  ID="ChVOIP" ng-model="HasVOIP" type="checkbox" ng-checked="HasVOIP"/><label>VOIP</label></td>
+          <td style="width:9%;border-color:white;text-align:left;"> <input  ID="ChMobilityGross" ng-model="HasMobilityGross" type="checkbox" ng-checked="HasMobilityGross"/><label>Mobility Gross</label></td>
+          <td style="width:9%;border-color:white;text-align:left;"> <input  ID="ChMobilityNet" ng-model="HasMobilityNet" type="checkbox" ng-checked="HasChMobilityNet"/><label>Mobility Net</label></td>
+        <td style="width:5%;border-color:white;vertical-align:bottom; text-align:center" colspan="2"><button  style="background-image: url(Images/imgLoadReport.png);background-repeat:no-repeat;border-color:white; border-width:0px;  text-align:left; width:110px;height:30px;vertical-align:bottom "   ng-click="LoadReport()" ></button></td>
+             </tr>
+
+          <tr>
+        <td style="border-color:white;text-align:left;"> <select  id="ddlLevel"  ng-model="myLevel" ng-change="getSelectedLevel(myLevel)">  <option ng-repeat="option in Levels" ng-selected="{{option==myLevel}}" value="{{option.id}}">{{option.name}}</option> </select></td>
+                 
+          <td style="width:6%; border-color:white;text-align:left;"></td>
+                             <td style="border-color:white;text-align:left;">Cancel</td>
+              <td style="border-color:white;"></td>
+              <td style="width:7%;border-color:white;text-align:left;"> <input  ID="ChIPTVc" ng-model="HasIPTVc" type="checkbox" /><label>IPTV</label></td>
+          <td style="width:7%;border-color:white;text-align:left;"> <input  ID="ChIPBBc" ng-model="HasIPBBc"  type="checkbox" /><label>IPBB</label></td>
+          <td style="width:7%;border-color:white;text-align:left;"> <input  ID="ChHSIAc" ng-model="HasHSIAc"  type="checkbox" /><label>HSIA</label></td>
+          <td style="width:7%;border-color:white;text-align:left;"> <input  ID="ChIPDSLc" ng-model="HasIPDSLc"  type="checkbox" /><label>IPDSL</label></td>
+          <td style="width:7%;border-color:white;text-align:left;"> <input  ID="ChVOIPc" ng-model="HasVOIPc"  type="checkbox" /><label>VOIP</label></td>
+              <td style="border-color:white;"></td>  <td style="border-color:white;"></td>  
+         <td style="text-align:center;  width:4%;border-color:white;vertical-align:top; ">  <a id="goHome" href=""></a></td> 
+         <td style="text-align:center;  width:3%;border-color:white;vertical-align:top;">  <a id="goExcel" href="Export.aspx" />  </td>
+          </tr>
+
+          <tr>
+       <td style="text-align:left;border-color:white;" colspan="2"> <div ID="ChIncl"> <input   ng-model="HasIncl" type="checkbox" /> <label>Incl. Normalized Data <BR> (ENT,SVP,VP levels only)</label></div></td>
+  <td style="border-color:white;text-align:left;">Total</td>
+<td style="border-color:white;text-align:left" colspan="2"> <input  ID="ChTOTALUV" ng-model="HasTOTALUV"  type="checkbox" ng-checked="TOTALUVchecked" /><label>UV DISCOS</label></td>
+              <td  colspan="2" style="border-color:white;text-align:left;"> <input  ID="ChUVCancels" ng-model="HasUVCancels"  type="checkbox"  /><label>UV CANCELS</label></td>
+                  <td  colspan="3" style="border-color:white;text-align:left;"> <input   ID="ChOveralCancels" ng-model="HasOveralCancels"  type="checkbox" ng-checked="OVERALLchecked"/><label>OVERALL UV,AL,DSL DISCOS & CANCELS</label></td>
+              <td style="border-color:white;"></td><td style="border-color:white;"></td><td style="border-color:white;"></td>
+          </tr>
+      </table>
+                        
+
+
+
+ 
+      </div>
+      
+ 
+
+          
+       <p id="rData"> </p>
+   </body>
+</html>
